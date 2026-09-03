@@ -1,0 +1,33 @@
+.vin-search-card {
+    margin: 22px auto 0;
+    padding: 18px 20px;
+    border: 1px solid rgba(128, 128, 128, .45);
+    border-radius: 12px;
+    text-align: left;
+    max-width: 600px;
+    box-sizing: border-box;
+}
+
+.vin-search-card h2 { margin: 0 0 6px; font-size: 20px; }
+.vin-search-help, .vin-search-note { margin: 6px 0 12px; font-size: 13px; opacity: .82; line-height: 1.4; }
+.vin-source-list { margin: 14px 0 12px; font-size: 13px; line-height: 1.55; }
+.vin-source-list strong { font-size: 14px; }
+.vin-source-list ul { margin: 5px 0 0; padding-left: 22px; }
+.vin-search-form label { display: block; font-size: 14px; margin-bottom: 5px; }
+.vin-search-fields { display: flex; gap: 8px; }
+.vin-search-fields input { flex: 1; min-width: 0; height: 38px; padding: 0 10px; box-sizing: border-box; border: 1px solid #888; border-radius: 6px; background: transparent; font-size: 15px; letter-spacing: .04em; }
+.vin-search-fields button { border: 0; border-radius: 6px; padding: 0 13px; cursor: pointer; font-size: 14px; }
+.vin-damage-option { margin-top: 11px !important; display: flex !important; gap: 7px; align-items: center; }
+.vin-damage-option input { margin: 0; }
+.vin-advanced-options { margin-top: 13px; padding-top: 12px; border-top: 1px solid rgba(128, 128, 128, .3); }
+.vin-advanced-options select { width: 100%; height: 34px; padding: 0 8px; border: 1px solid #888; border-radius: 6px; background: transparent; }
+.vin-option-label { display: block; margin: 12px 0 5px; font-size: 13px; }
+.vin-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 10px; }
+.vin-checks label { display: flex; gap: 6px; align-items: center; margin: 0; font-size: 13px; }
+.vin-checks input { margin: 0; }
+
+@media (max-width: 520px) {
+    .vin-search-fields { display: block; }
+    .vin-search-fields input, .vin-search-fields button { width: 100%; }
+    .vin-search-fields button { height: 38px; margin-top: 8px; }
+}

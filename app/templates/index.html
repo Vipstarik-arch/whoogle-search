@@ -44,6 +44,7 @@
     {% endif %}
     {% if not bundle_static() %}
         <link rel="stylesheet" href="{{ cb_url('main.css') }}">
+        <link rel="stylesheet" href="{{ cb_url('vin-search.css') }}">
     {% endif %}
     <noscript>
         <style>
@@ -92,6 +93,62 @@
             <input type="submit" id="search-submit" value="{{ translation['search'] }}">
         </div>
     </form>
+
+    <section class="vin-search-card" aria-labelledby="vin-search-title">
+        <h2 id="vin-search-title">Caută automobil după VIN</h2>
+        <p class="vin-search-help">Verifică mențiuni publice despre accidente, daune, licitații, furt, kilometraj și istoricul titlului.</p>
+        <form action="vehicle-search" method="post" class="vin-search-form">
+            <label for="vin-code">Cod VIN</label>
+            <div class="vin-search-fields">
+                <input id="vin-code" name="vin" type="text" minlength="17" maxlength="17"
+                       pattern="[A-HJ-NPR-Z0-9]{17}" placeholder="ex. 1HGCM82653A004352"
+                       autocapitalize="characters" autocomplete="off" spellcheck="false" required>
+                <button type="submit">Caută istoricul</button>
+            </div>
+            <label class="vin-damage-option">
+                <input type="checkbox" name="damage" checked>
+                Include în special daune și accidente
+            </label>
+            <div class="vin-advanced-options">
+                <label for="vin-country">Țara / piața automobilului</label>
+                <select id="vin-country" name="vin_country">
+                    <option value="">Toate țările (căutare globală)</option>
+                    <option value="ro">România / Moldova</option>
+                    <option value="gb">Marea Britanie</option>
+                    <option value="us">SUA</option>
+                    <option value="de">Germania</option>
+                    <option value="fr">Franța</option>
+                    <option value="it">Italia</option>
+                    <option value="es">Spania</option>
+                    <option value="pl">Polonia</option>
+                    <option value="ru">Rusia</option>
+                    <option value="ua">Ucraina</option>
+                </select>
+                <span class="vin-option-label">Categorii căutate:</span>
+                <div class="vin-checks">
+                    <label><input type="checkbox" name="focus" value="auction" checked> licitații</label>
+                    <label><input type="checkbox" name="focus" value="insurance" checked> asigurări</label>
+                    <label><input type="checkbox" name="focus" value="theft" checked> furt</label>
+                    <label><input type="checkbox" name="focus" value="mileage" checked> kilometraj</label>
+                    <label><input type="checkbox" name="focus" value="service" checked> service Ford</label>
+                    <label><input type="checkbox" name="focus" value="official" checked> rapoarte oficiale</label>
+                </div>
+            </div>
+        </form>
+        <div class="vin-source-list">
+            <strong>Surse care pot conține informații:</strong>
+            <ul>
+                <li>baze de date ale licitațiilor auto</li>
+                <li>rapoarte de asigurare</li>
+                <li>registre de furturi</li>
+                <li>istoricul kilometrajului</li>
+                <li>service-uri autorizate Ford</li>
+                <li>rapoarte oficiale plătite</li>
+            </ul>
+        </div>
+        <p class="vin-search-note">Rezultatele provin din pagini publice indexate. Nu înlocuiesc un raport oficial sau o inspecție tehnică.</p>
+    </section>
+
     {% if not config_disabled %}
         <br/>
         <button id="config-collapsible" class="collapsible">{{ translation['config'] }}</button>

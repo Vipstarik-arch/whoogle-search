@@ -28,6 +28,7 @@ from app.utils.widgets import *
 from app.utils.results import bold_search_terms,\
     add_currency_card, check_currency, get_tabs_content
 from app.utils.search import Search, needs_https, has_captcha
+from app.utils.vin import build_vin_query, is_valid_vin, normalize_vin
 from app.utils.session import valid_user_session
 from bs4 import BeautifulSoup as bsoup
 from flask import jsonify, make_response, request, redirect, render_template, \
@@ -232,6 +233,34 @@ def index():
                            config=g.user_config,
                            tor_available=int(os.environ.get('TOR_AVAILABLE')),
                            version_number=app.config['VERSION_NUMBER'])
+
+
+@app.route('/vehicle-search', methods=['GET', 'POST'])
+@session_required
+@auth_required
+def vehicle_search():
+    """Turn a VIN into a broad public-web vehicle-history search.
+
+    Whoogle does not have access to private insurer, police, DMV, or paid
+    databases. This endpoint searches only what the configured search backend
+    has publicly indexed, while keeping the VIN query encrypted on POST just
+    like the normal search form.
+    """
+    vin = normalize_vin(request.values.get('vin', ''))
+    # The check digit is not required by every manufacturer/market; retain
+    # shape validation so legitimate European and imported vehicles work too.
+    if not is_valid_vin(vin, check_digit=False):
+        return make_response(
+            'VIN invalid. Enter 17 characters (letters I, O and Q are not used) '
+            'and check that it was copied correctly.', 400)
+
+    query = build_vin_query(vin, request.values.get('damage') == 'on')
+    if request.method == 'POST':
+        query = encrypt_string(g.session_key, query)
+    params = {'q': query}
+    if g.user_config.preferences:
+        params['preferences'] = g.user_config.preferences
+    return redirect(url_for('.search') + '?' + urlparse.urlencode(params))
 
 
 @app.route(f'/{Endpoint.opensearch}', methods=['GET'])

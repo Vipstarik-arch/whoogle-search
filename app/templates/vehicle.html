@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="static/img/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
+    {% if bundle_static() %}
+        <link rel="stylesheet" href="/{{ cb_url('bundle.css') }}">
+    {% else %}
+        <link rel="stylesheet" href="{{ cb_url('logo.css') }}">
+        <link rel="stylesheet" href="{{ cb_url('main.css') }}">
+        <link rel="stylesheet" href="{{ cb_url('vin-search.css') }}">
+    {% endif %}
+    {% if config.theme %}
+        {% if config.theme == 'system' %}
+            <style>
+                @import "{{ cb_url('light-theme.css') }}" screen;
+                @import "{{ cb_url('dark-theme.css') }}" screen and (prefers-color-scheme: dark);
+            </style>
+        {% else %}
+            <link rel="stylesheet" href="{{ cb_url(config.theme + '-theme.css') }}"/>
+        {% endif %}
+    {% endif %}
+    <style>{{ config.style }}</style>
+    <title>{{ vin }} – VIN – Whoogle Search</title>
+</head>
+<body id="main">
+<div class="vehicle-logo-container">
+    <a class="logo-link" href="/" aria-label="Whoogle Search">
+        {{ logo|safe }}
+    </a>
+</div>
+<div class="vehicle-page">
+    <section class="vin-search-card vin-result-card" aria-labelledby="vin-result-title">
+        <h2 id="vin-result-title">{{ translation['vin.decodedTitle'] }}</h2>
+        <p class="vin-result-vin"><code>{{ vin }}</code></p>
+
+        {% if details.warning and details.warning[lang] %}
+            <p class="vin-warning">{{ details.warning[lang] }}</p>
+        {% endif %}
+
+        {% if details.corrected_vin %}
+            <div class="vin-corrected">
+                <strong>{{ translation['vin.correctedTitle'] }}</strong>
+                <code>{{ details.corrected_vin }}</code>
+                <div class="vin-actions">
+                    <form action="vehicle-decode" method="post" class="vin-action-form">
+                        <input type="hidden" name="vin" value="{{ details.corrected_vin }}">
+                        <button type="submit" class="vin-button vin-button-secondary">
+                            {{ translation['vin.decodeSubmit'] }}
+                        </button>
+                    </form>
+                    <form action="vehicle-search" method="post" class="vin-action-form">
+                        <input type="hidden" name="vin" value="{{ details.corrected_vin }}">
+                        <button type="submit" class="vin-button vin-button-primary">
+                            {{ translation['vin.decodedHistory'] }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if details.vehicle %}
+            <h3 class="vin-subsection">{{ translation['vin.decodedSpecs'] }}</h3>
+            <table class="vin-spec-table">
+                {% for key, field in spec_fields %}
+                    {% if details.vehicle.get(field) %}
+                        <tr>
+                            <th scope="row">{{ spec_labels[key] }}</th>
+                            <td>{{ details.vehicle[field] }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if details.recalls %}
+            <h3 class="vin-subsection">{{ translation['vin.decodedRecalls'] }} ({{ details.recalls|length }})</h3>
+            <ul class="vin-recalls">
+                {% for recall in details.recalls %}
+                    <li class="vin-recall">
+                        <a href="{{ recall.url }}" rel="noopener noreferrer" target="_blank"
+                           class="vin-recall-id">{{ recall.campaign_id }}</a>
+                        <strong class="vin-recall-component">
+                            {{ recall.component or recall.manufacturer }}
+                        </strong>
+                        {% if recall.summary %}
+                            <p class="vin-recall-text">{{ recall.summary }}</p>
+                        {% endif %}
+                        {% if recall.remedy %}
+                            <p class="vin-recall-remedy">{{ recall.remedy }}</p>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="vin-actions">
+            <form action="vehicle-search" method="post" class="vin-action-form">
+                <input type="hidden" name="vin" value="{{ vin }}">
+                <input type="hidden" name="vin_make" value="{{ details.vehicle.get('make', '') }}">
+                <input type="hidden" name="vin_year" value="{{ details.vehicle.get('model_year', '') }}">
+                <input type="hidden" name="damage" value="on">
+                <button type="submit" class="vin-button vin-button-primary">
+                    {{ translation['vin.decodedHistory'] }}
+                </button>
+            </form>
+            <a class="vin-button vin-button-secondary"
+               href="vehicle-sources?vin={{ vin }}">{{ translation['vin.decodedSources'] }}</a>
+        </div>
+
+        <p class="vin-search-note">{{ translation['vin.decodedPrivacy'] }}</p>
+    </section>
+</div>
+</body>
+</html>

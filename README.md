@@ -487,6 +487,7 @@ There are a few optional environment variables available for customizing a Whoog
 | WHOOGLE_ALT_QUORA    | The quora.com alternative to use when site alternatives are enabled in the config. Set to "" to disable. |
 | WHOOGLE_ALT_SO       | The stackoverflow.com alternative to use when site alternatives are enabled in the config. Set to "" to disable. |
 | WHOOGLE_AUTOCOMPLETE | Controls visibility of autocomplete/search suggestions. Default on -- use '0' to disable. |
+| WHOOGLE_VIN_DECODER | Enables VIN decoding through the free public NHTSA (VPIC) API. The VIN is sent to vpic.nhtsa.dot.gov only when the user decodes one. Default on -- use '0' to disable. |
 | WHOOGLE_MINIMAL      | Remove everything except basic result cards from all search queries.                      |
 | WHOOGLE_CSP          | Sets a default set of 'Content-Security-Policy' headers                                   |
 | WHOOGLE_TOR_SERVICE  | Enable/disable the Tor service on startup. Default on -- use '0' to disable.              |
@@ -651,6 +652,29 @@ Whoogle can return filtered results as JSON using the same sanitization rules as
 Special cases:
 - Feeling Lucky returns HTTP 303 with body `{ "redirect": "<url>" }`.
 - Temporary blocks (captcha) return HTTP 503 with `{ "blocked": true, "error_message": "...", "query": "..." }`.
+
+## Extra Steps
+
+### VIN search and decoding (vehicle history)
+The home page includes a VIN card for checking a vehicle before buying:
+
+- **Search public history** – builds a broad public-web query (accidents,
+  auctions, insurance, theft, mileage, service recalls, official reports) and
+  runs it through the configured search backend. Only publicly indexed pages
+  are searched; no private insurer, police, DMV or paid database is accessed.
+- **Decode vehicle** – sends the VIN to the free public [NHTSA VPIC
+  API](https://vpic.nhtsa.dot.gov/decoder/) and displays the manufacturer
+  record (make, model, year, engine, body, plant, …) plus matching U.S. recall
+  campaigns. Disable this on the instance with `WHOOGLE_VIN_DECODER=0`.
+  The check digit (9th character) is validated locally with the ISO 3779
+  weights; when it is wrong the page computes and proposes the corrected VIN.
+- **Verification sources** – `/vehicle-sources` lists official registries
+  (NHTSA, NMVTIS, RAR, ASP Moldova, DVLA) and commercial report providers
+  (CARFAX, AutoCheck, HPI, autoDNA, carVertical). Whoogle only links to them;
+  vehicle data is never sent to them automatically.
+
+Decoded pages are marked `noindex` and are never cached. The interface is
+available in Romanian (`lang_ro`) as well as the other bundled languages.
 
 ## Extra Steps
 

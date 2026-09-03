@@ -28,7 +28,11 @@ from app.utils.widgets import *
 from app.utils.results import bold_search_terms,\
     add_currency_card, check_currency, get_tabs_content
 from app.utils.search import Search, needs_https, has_captcha
-from app.utils.vin import build_vin_query, is_valid_vin, normalize_vin
+from app.utils.vin import (
+    VERIFICATION_SOURCES, SPEC_FIELDS, SPEC_LABELS, SOURCE_GROUPS,
+    SOURCE_GROUP_LABELS, VinLookupError, build_vin_query, fetch_vehicle_details,
+    is_valid_vin, normalize_vin,
+)
 from app.utils.session import valid_user_session
 from bs4 import BeautifulSoup as bsoup
 from flask import jsonify, make_response, request, redirect, render_template, \
@@ -175,7 +179,10 @@ def before_request_func():
 def after_request_func(resp):
     resp.headers['X-Content-Type-Options'] = 'nosniff'
     resp.headers['X-Frame-Options'] = 'DENY'
-    resp.headers['Cache-Control'] = 'max-age=86400'
+    # Routes may opt out of caching (e.g. VIN-derived pages) by setting their
+    # own Cache-Control header before this hook runs.
+    if 'Cache-Control' not in resp.headers:
+        resp.headers['Cache-Control'] = 'max-age=86400'
     
     # Security headers
     resp.headers['Referrer-Policy'] = 'no-referrer'
@@ -259,7 +266,9 @@ def vehicle_search():
         vin,
         request.values.get('damage') == 'on',
         focuses=focuses or None,
-        country=request.values.get('vin_country', g.user_config.country)
+        country=request.values.get('vin_country', g.user_config.country),
+        make=request.values.get('vin_make', ''),
+        year=request.values.get('vin_year', ''),
     )
     if request.method == 'POST':
         query = encrypt_string(g.session_key, query)
@@ -267,6 +276,96 @@ def vehicle_search():
     if g.user_config.preferences:
         params['preferences'] = g.user_config.preferences
     return redirect(url_for('.search') + '?' + urlparse.urlencode(params))
+
+
+@app.route('/vehicle-decode', methods=['POST'])
+@session_required
+@auth_required
+def vehicle_decode():
+    """Decode a VIN through the free public NHTSA (VPIC) APIs.
+
+    Only the VIN is sent to vpic.nhtsa.dot.gov; no paid, private or police
+    database is queried. The endpoint can be disabled with
+    ``WHOOGLE_VIN_DECODER=0`` and the page is never cached nor indexed.
+    """
+    vin = normalize_vin(request.values.get('vin', ''))
+    if not is_valid_vin(vin, check_digit=False):
+        return make_response(
+            'VIN invalid. Enter 17 characters (letters I, O and Q are not used) '
+            'and check that it was copied correctly.', 400)
+
+    details = {'vehicle': {}, 'recalls': [], 'warning': {
+        'en': '', 'ro': ''}}
+    decoder_enabled = read_config_bool('WHOOGLE_VIN_DECODER', True)
+    if not decoder_enabled:
+        details['warning'] = {
+            'en': 'VIN decoding is disabled on this instance '
+                  '(WHOOGLE_VIN_DECODER=0).',
+            'ro': 'Decodificarea VIN este dezactivată pe această instanță '
+                  '(WHOOGLE_VIN_DECODER=0).',
+        }
+    else:
+        try:
+            details = fetch_vehicle_details(vin)
+        except VinLookupError as exc:
+            details = {'vehicle': {}, 'recalls': [], 'warning': {
+                'en': str(exc),
+                'ro': 'Interogarea NHTSA a eșuat. API-ul public poate fi '
+                      'temporar indisponibil sau instanța nu are acces la '
+                      'rețea.',
+            }}
+        except Exception:
+            app.logger.exception('Unexpected VIN decode failure')
+            details = {'vehicle': {}, 'recalls': [], 'warning': {
+                'en': 'Unexpected error while decoding the VIN.',
+                'ro': 'Eroare neașteptată la decodificarea VIN.',
+            }}
+
+    localization = g.user_config.get_localization_lang()
+    translation = app.config['TRANSLATIONS'][localization]
+    lang = 'ro' if localization == 'lang_ro' else 'en'
+
+    response = make_response(render_template(
+        'vehicle.html',
+        vin=vin,
+        details=details,
+        spec_fields=SPEC_FIELDS,
+        spec_labels=SPEC_LABELS[lang],
+        lang=lang,
+        translation=translation,
+        config=g.user_config,
+        logo=render_template('logo.html')))
+    # VIN-derived pages must never be cached or indexed by search engines.
+    response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
+@app.route('/vehicle-sources', methods=['GET'])
+@auth_required
+def vehicle_sources():
+    """List public and commercial resources for verifying a vehicle by VIN."""
+    localization = g.user_config.get_localization_lang()
+    translation = app.config['TRANSLATIONS'][localization]
+    lang = 'ro' if localization == 'lang_ro' else 'en'
+    decoder_enabled = read_config_bool('WHOOGLE_VIN_DECODER', True)
+    vin = normalize_vin(request.args.get('vin', ''))
+    response = make_response(render_template(
+        'vehicle-sources.html',
+        vin=vin,
+        sources=VERIFICATION_SOURCES,
+        source_groups=SOURCE_GROUPS,
+        source_group_labels=SOURCE_GROUP_LABELS[lang],
+        lang=lang,
+        decoder_enabled=decoder_enabled,
+        translation=translation,
+        config=g.user_config,
+        logo=render_template('logo.html')))
+    if vin:
+        # A VIN in the URL must never be cached or indexed.
+        response.headers['X-Robots-Tag'] = 'noindex, nofollow'
+        response.headers['Cache-Control'] = 'no-store'
+    return response
 
 
 @app.route(f'/{Endpoint.opensearch}', methods=['GET'])

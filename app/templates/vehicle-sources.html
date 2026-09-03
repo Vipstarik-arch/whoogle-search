@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="static/img/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    {% if bundle_static() %}
+        <link rel="stylesheet" href="/{{ cb_url('bundle.css') }}">
+    {% else %}
+        <link rel="stylesheet" href="{{ cb_url('logo.css') }}">
+        <link rel="stylesheet" href="{{ cb_url('main.css') }}">
+        <link rel="stylesheet" href="{{ cb_url('vin-search.css') }}">
+    {% endif %}
+    {% if config.theme %}
+        {% if config.theme == 'system' %}
+            <style>
+                @import "{{ cb_url('light-theme.css') }}" screen;
+                @import "{{ cb_url('dark-theme.css') }}" screen and (prefers-color-scheme: dark);
+            </style>
+        {% else %}
+            <link rel="stylesheet" href="{{ cb_url(config.theme + '-theme.css') }}"/>
+        {% endif %}
+    {% endif %}
+    <style>{{ config.style }}</style>
+    <title>{{ translation['sources.title'] }} – Whoogle Search</title>
+</head>
+<body id="main">
+<div class="vehicle-logo-container">
+    <a class="logo-link" href="/" aria-label="Whoogle Search">
+        {{ logo|safe }}
+    </a>
+</div>
+<div class="vehicle-page">
+    <section class="vin-search-card" aria-labelledby="vin-sources-title">
+        <h2 id="vin-sources-title">{{ translation['sources.title'] }}</h2>
+        <p class="vin-search-help">{{ translation['sources.subtitle'] }}</p>
+
+        {% for group in source_groups %}
+            <h3 class="vin-subsection">{{ source_group_labels[group] }}</h3>
+            <ul class="vin-sources-list">
+                {% for source in sources if source.kind == group %}
+                    <li class="vin-source-item">
+                        <div class="vin-source-heading">
+                            <a class="link" href="{{ source.url }}" rel="noopener noreferrer"
+                               target="_blank">{{ source.name }}</a>
+                            <span class="vin-source-scope">{{ source.scope }}</span>
+                        </div>
+                        <p class="vin-source-description">
+                            {{ source['description' + ('_ro' if lang == 'ro' else '')] }}
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+
+        <p class="vin-search-note">{{ translation['sources.disclaimer'] }}</p>
+
+        {% if vin %}
+            <div class="vin-actions">
+                <form action="vehicle-search" method="post" class="vin-action-form">
+                    <input type="hidden" name="vin" value="{{ vin }}">
+                    <button type="submit" class="vin-button vin-button-primary">
+                        {{ translation['vin.decodedHistory'] }}
+                    </button>
+                </form>
+                {% if decoder_enabled %}
+                    <form action="vehicle-decode" method="post" class="vin-action-form">
+                        <input type="hidden" name="vin" value="{{ vin }}">
+                        <button type="submit" class="vin-button vin-button-secondary">
+                            {{ translation['vin.decodeSubmit'] }}
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+</div>
+</body>
+</html>

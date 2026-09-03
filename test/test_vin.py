@@ -3,7 +3,7 @@ import pytest
 from app.utils.vin import (
     VERIFICATION_SOURCES, VinLookupError, build_vin_query,
     correct_vin_check_digit, expected_check_digit, fetch_vehicle_details,
-    is_valid_vin, normalize_vin,
+    has_valid_model_year_code, is_valid_vin, normalize_vin,
 )
 
 # Classic ISO 3779 example: 9th character '3' is the correct check digit.
@@ -36,6 +36,39 @@ def test_check_digit_follows_iso_3779_weights():
 def test_correct_vin_check_digit_leaves_valid_vins_untouched():
     assert correct_vin_check_digit(VALID_VIN) == VALID_VIN
     assert correct_vin_check_digit('not a vin') == 'NOTAVIN'
+
+
+# --- Model-year code validation -------------------------------------------
+
+def test_model_year_code_validation():
+    # Position 10 of this BMW-style VIN is '0', which ISO 3779 never uses.
+    vin = 'WBAJC51050WB84663'
+    assert not has_valid_model_year_code(vin)
+    assert not is_valid_vin(vin)
+    # The lenient route path (shape only) still accepts it for display.
+    assert is_valid_vin(vin, check_digit=False)
+    assert has_valid_model_year_code(VALID_VIN)
+    assert has_valid_model_year_code('WF0PXXGC5PJR71967')  # 'P' = 2023
+
+
+def test_fetch_warns_on_invalid_model_year_code():
+    vin = 'WBAJC51050WB84663'
+    decode = [
+        {'Value': '1,11,14,400', 'Variable': 'Error Code'},
+        {'Value': '1 - Check Digit ...; 11 - Incorrect Model Year - Position '
+                  '10 does not match valid model year codes; '
+                  '400 - Invalid Characters Present', 'Variable': 'Error Text'},
+        {'Value': 'BMW', 'Variable': 'Make'},
+        {'Value': 'BMW AG', 'Variable': 'Manufacturer Name'},
+        {'Value': 'PASSENGER CAR', 'Variable': 'Vehicle Type'},
+        {'Value': 'GRAZ', 'Variable': 'Plant City'},
+        {'Value': 'AUSTRIA', 'Variable': 'Plant Country'},
+    ]
+    details = fetch_vehicle_details(
+        vin, client=FakeClient(decode=decode, recalls=[]))
+    assert "'0'" in details['warning']['en']
+    assert 'poziția 10' in details['warning']['ro']
+    assert details['vehicle']['make'] == 'BMW'
 
 
 def test_vin_query_keeps_exact_code_and_damage_terms():

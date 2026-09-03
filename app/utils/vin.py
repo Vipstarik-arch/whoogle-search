@@ -35,6 +35,10 @@ _TRANSLITERATION = {
 # weight 0, so it does not influence the sum.
 _WEIGHTS = (8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2)
 
+# Model-year codes allowed in position 10 (1980=A ... 2000=Y, 2001=1 ...
+# 2009=9, 2010=A ...). The digit 0 and letters I, O, Q, U, Z are never used.
+VALID_MODEL_YEAR_CODES = frozenset("ABCDEFGHJKLMNPRSTVWXY123456789")
+
 
 def normalize_vin(vin: str) -> str:
     """Return a VIN in the canonical form used by search engines."""
@@ -71,6 +75,19 @@ def correct_vin_check_digit(vin: str) -> str:
     return value[:8] + expected + value[9:]
 
 
+def has_valid_model_year_code(vin: str) -> bool:
+    """Return True when the model-year code (position 10) is ISO 3779 valid.
+
+    A VIN-shaped value whose 10th character is one of the allowed model-year
+    codes (0 and I/O/Q/U/Z are never used) passes; everything else — including
+    values that do not even have a VIN shape — returns False.
+    """
+    value = normalize_vin(vin)
+    if not VIN_RE.fullmatch(value):
+        return False
+    return value[9] in VALID_MODEL_YEAR_CODES
+
+
 def is_valid_vin(vin: str, *, check_digit: bool = True) -> bool:
     """Validate VIN shape and, where applicable, its ISO 3779 check digit.
 
@@ -83,7 +100,8 @@ def is_valid_vin(vin: str, *, check_digit: bool = True) -> bool:
         return False
     if not check_digit:
         return True
-    return value[8] == expected_check_digit(value)
+    return (value[8] == expected_check_digit(value)
+            and has_valid_model_year_code(value))
 
 
 # ---------------------------------------------------------------------------
@@ -297,27 +315,44 @@ def fetch_vehicle_details(vin: str, *, include_recalls: bool = True,
     error_code = _decode_value(results, 'Error Code')
     error_text = _decode_value(results, 'Error Text')
 
+    warning = {'en': '', 'ro': ''}
+
+    def add_warning(text: dict) -> None:
+        for lang in ('en', 'ro'):
+            part = text.get(lang, '')
+            if part:
+                warning[lang] = (warning[lang] + ' ' if warning[lang]
+                                 else '') + part
+
     if not vehicle:
-        warning = {
+        add_warning({
             'en': 'No public manufacturer record was found for this VIN. '
                   'The record may not be in the NHTSA dataset (e.g. an '
                   'older European vehicle).',
             'ro': 'Nu a fost găsită nicio înregistrare publică de producător '
                   'pentru acest VIN. Este posibil ca vehiculul să nu existe '
                   'în baza NHTSA (de exemplu, un vehicul european mai vechi).',
-        }
+        })
     elif error_code not in (None, '', '0') or error_text:
         detail = (
             error_text or
             'VPIC reported an issue decoding this VIN (error code {}).'.format(
                 error_code or 'unknown')
         )
-        warning = {
+        add_warning({
             'en': detail + ' The record may be incomplete or unofficial.',
             'ro': detail + ' Înregistrarea poate fi incompletă sau neoficială.',
-        }
-    else:
-        warning = {'en': '', 'ro': ''}
+        })
+
+    # Position 10 must be a valid ISO 3779 model-year code; NHTSA rejects
+    # VINs whose year code is 0 or one of I/O/Q/U/Z.
+    if vin[9] not in VALID_MODEL_YEAR_CODES:
+        add_warning({
+            'en': f"Model-year code (position 10) '{vin[9]}' is invalid. "
+                  "One character may be wrong in this VIN.",
+            'ro': f"Codul anului de fabricație (poziția 10) '{vin[9]}' este "
+                  "invalid. Un caracter din acest VIN poate fi greșit.",
+        })
 
     # When the entered check digit is wrong we can compute the correct one
     # locally (ISO 3779) and point the user at it — much more useful than the
@@ -327,15 +362,12 @@ def fetch_vehicle_details(vin: str, *, include_recalls: bool = True,
     if check_digit_bad:
         details = {'vehicle': vehicle, 'recalls': [],
                    'corrected_vin': corrected}
-        base = warning
-        warning = {
-            'en': ((base['en'] + ' ') if base['en'] else '') +
-                  f'Check digit (9th character) is invalid. Corrected VIN: '
-                  f'{corrected}.',
-            'ro': ((base['ro'] + ' ') if base['ro'] else '') +
-                  f'Cifra de control (caracterul 9) este invalidă. '
+        add_warning({
+            'en': f'Check digit (9th character) is invalid. '
+                  f'Corrected VIN: {corrected}.',
+            'ro': 'Cifra de control (caracterul 9) este invalidă. '
                   f'VIN corectat: {corrected}.',
-        }
+        })
         # Drop the raw NHTSA suggestion in favour of the computed one.
         vehicle.pop('suggested_vin', None)
     else:
@@ -343,12 +375,10 @@ def fetch_vehicle_details(vin: str, *, include_recalls: bool = True,
 
     if not check_digit_bad and 'suggested_vin' in vehicle:
         suggested = vehicle['suggested_vin']
-        warning = {
-            'en': ((warning['en'] + ' ') if warning['en'] else '') +
-                  f'Suggested VIN: {suggested}.',
-            'ro': ((warning['ro'] + ' ') if warning['ro'] else '') +
-                  f'VIN sugerat: {suggested}.',
-        }
+        add_warning({
+            'en': f'Suggested VIN: {suggested}.',
+            'ro': f'VIN sugerat: {suggested}.',
+        })
 
     details['warning'] = warning
 

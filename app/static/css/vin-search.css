@@ -10,6 +10,9 @@
 
 .vin-search-card h2 { margin: 0 0 6px; font-size: 20px; }
 .vin-search-help, .vin-search-note { margin: 6px 0 12px; font-size: 13px; opacity: .82; line-height: 1.4; }
+.vin-source-list { margin: 14px 0 12px; font-size: 13px; line-height: 1.55; }
+.vin-source-list strong { font-size: 14px; }
+.vin-source-list ul { margin: 5px 0 0; padding-left: 22px; }
 .vin-search-form label { display: block; font-size: 14px; margin-bottom: 5px; }
 .vin-search-fields { display: flex; gap: 8px; }
 .vin-search-fields input { flex: 1; min-width: 0; height: 38px; padding: 0 10px; box-sizing: border-box; border: 1px solid #888; border-radius: 6px; background: transparent; font-size: 15px; letter-spacing: .04em; }

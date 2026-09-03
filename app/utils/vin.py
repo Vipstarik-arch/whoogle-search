@@ -45,7 +45,8 @@ def build_vin_query(vin: str, include_damage: bool = True) -> str:
     value = normalize_vin(vin)
     terms = (
         'accident damage salvage auction insurance theft stolen recall '
-        'odometer title history report'
+        'odometer mileage title history report Ford authorized service '
+        'paid official report'
         if include_damage else
         'vehicle history report recall theft title odometer auction'
     )

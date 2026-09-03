@@ -20,6 +20,8 @@ def test_vin_query_keeps_exact_code_and_damage_terms():
     assert f'"{VALID_VIN}"' in query
     assert 'accident' in query
     assert 'salvage' in query
+    assert 'Ford' in query
+    assert 'paid' in query
 
 
 def test_vin_query_can_focus_on_history():

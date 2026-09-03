@@ -41,6 +41,27 @@
             <p class="vin-warning">{{ details.warning[lang] }}</p>
         {% endif %}
 
+        {% if details.corrected_vin %}
+            <div class="vin-corrected">
+                <strong>{{ translation['vin.correctedTitle'] }}</strong>
+                <code>{{ details.corrected_vin }}</code>
+                <div class="vin-actions">
+                    <form action="vehicle-decode" method="post" class="vin-action-form">
+                        <input type="hidden" name="vin" value="{{ details.corrected_vin }}">
+                        <button type="submit" class="vin-button vin-button-secondary">
+                            {{ translation['vin.decodeSubmit'] }}
+                        </button>
+                    </form>
+                    <form action="vehicle-search" method="post" class="vin-action-form">
+                        <input type="hidden" name="vin" value="{{ details.corrected_vin }}">
+                        <button type="submit" class="vin-button vin-button-primary">
+                            {{ translation['vin.decodedHistory'] }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
         {% if details.vehicle %}
             <h3 class="vin-subsection">{{ translation['vin.decodedSpecs'] }}</h3>
             <table class="vin-spec-table">

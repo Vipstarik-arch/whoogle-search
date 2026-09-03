@@ -1,22 +1,41 @@
 import pytest
 
 from app.utils.vin import (
-    VERIFICATION_SOURCES, VinLookupError, build_vin_query, fetch_vehicle_details,
+    VERIFICATION_SOURCES, VinLookupError, build_vin_query,
+    correct_vin_check_digit, expected_check_digit, fetch_vehicle_details,
     is_valid_vin, normalize_vin,
 )
 
-VALID_VIN = '1HGCM82653A004352'
+# Classic ISO 3779 example: 9th character '3' is the correct check digit.
+VALID_VIN = '1HGCM82633A004352'
 
 
 def test_normalize_vin_removes_formatting():
-    assert normalize_vin('1hgcm-82653 a004352') == VALID_VIN
+    assert normalize_vin('1hgcm-82633 a004352') == VALID_VIN
 
 
 def test_vin_validation_checks_shape_and_check_digit():
     assert is_valid_vin(VALID_VIN)
     assert not is_valid_vin('1HGCM82633A00435I')
-    assert not is_valid_vin('1HGCM82633A004351')
-    assert is_valid_vin('1HGCM82633A004351', check_digit=False)
+    # Same VIN with a wrong check digit ('5' instead of '3').
+    assert not is_valid_vin('1HGCM82653A004352')
+    assert is_valid_vin('1HGCM82653A004352', check_digit=False)
+
+
+def test_check_digit_follows_iso_3779_weights():
+    # 'WF0PXXGCHPJR71967' is a real-world Ford Europe VIN with a wrong check
+    # digit: the 9th character must be 0-9 or X and here is 'H'.
+    vin = 'WF0PXXGCHPJR71967'
+    assert not is_valid_vin(vin)
+    assert is_valid_vin(vin, check_digit=False)
+    assert expected_check_digit(vin) == '5'
+    assert correct_vin_check_digit(vin) == 'WF0PXXGC5PJR71967'
+    assert is_valid_vin('WF0PXXGC5PJR71967')
+
+
+def test_correct_vin_check_digit_leaves_valid_vins_untouched():
+    assert correct_vin_check_digit(VALID_VIN) == VALID_VIN
+    assert correct_vin_check_digit('not a vin') == 'NOTAVIN'
 
 
 def test_vin_query_keeps_exact_code_and_damage_terms():
@@ -143,6 +162,25 @@ def test_fetch_vehicle_details_reports_unknown_vin():
     assert details['vehicle'] == {}
     assert 'en' in details['warning'] and details['warning']['en']
     assert details['recalls'] == []
+
+
+def test_fetch_suggests_corrected_check_digit():
+    vin = 'WF0PXXGCHPJR71967'
+    decode = [
+        {'Value': '1,8,400', 'Variable': 'Error Code'},
+        {'Value': '1 - Check Digit (9th position) does not calculate properly; '
+                  '8 - No detailed data available currently; '
+                  '400 - Invalid Characters Present', 'Variable': 'Error Text'},
+        {'Value': 'WF0PXXGC!PJR71967', 'Variable': 'Suggested VIN'},
+        {'Value': 'FORD', 'Variable': 'Make'},
+        {'Value': '2023', 'Variable': 'Model Year'},
+    ]
+    details = fetch_vehicle_details(vin, client=FakeClient(decode=decode))
+    assert details['corrected_vin'] == 'WF0PXXGC5PJR71967'
+    assert 'corrected_vin' not in details['vehicle']
+    assert 'Check digit' in details['warning']['en']
+    assert 'WF0PXXGC5PJR71967' in details['warning']['en']
+    assert 'Cifra de control' in details['warning']['ro']
 
 
 def test_fetch_vehicle_details_survives_recalls_failure():

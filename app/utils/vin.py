@@ -31,12 +31,44 @@ _TRANSLITERATION = {
     **dict(zip("PR", (7, 9))),
     **dict(zip("STUVWXYZ", range(2, 10))),
 }
-_WEIGHTS = (8, 7, 6, 5, 4, 3, 2, 10, 0, 8, 7, 6, 5, 4, 3, 2)
+# ISO 3779 weights for all 17 positions; position 9 (the check digit) has
+# weight 0, so it does not influence the sum.
+_WEIGHTS = (8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2)
 
 
 def normalize_vin(vin: str) -> str:
     """Return a VIN in the canonical form used by search engines."""
     return re.sub(r"[\s-]", "", vin or "").upper()
+
+
+def expected_check_digit(vin: str) -> str:
+    """Return the ISO 3779 check digit (0-9 or X) for a valid-shaped VIN.
+
+    Returns an empty string when the value does not have a valid VIN shape.
+    """
+    value = normalize_vin(vin)
+    if not VIN_RE.fullmatch(value):
+        return ""
+    total = sum(
+        (int(char) if char.isdigit() else _TRANSLITERATION[char]) * weight
+        for char, weight in zip(value, _WEIGHTS)
+    )
+    return "X" if total % 11 == 10 else str(total % 11)
+
+
+def correct_vin_check_digit(vin: str) -> str:
+    """Return the VIN with a corrected ISO 3779 check digit.
+
+    The 9th position of a VIN may only contain 0-9 or X. When the caller
+    passes a value whose check digit is wrong (or not a valid check-digit
+    character), the corrected VIN is returned. In all other cases the input
+    is returned unchanged.
+    """
+    value = normalize_vin(vin)
+    expected = expected_check_digit(value)
+    if not expected or value[8] == expected:
+        return value
+    return value[:8] + expected + value[9:]
 
 
 def is_valid_vin(vin: str, *, check_digit: bool = True) -> bool:
@@ -51,13 +83,7 @@ def is_valid_vin(vin: str, *, check_digit: bool = True) -> bool:
         return False
     if not check_digit:
         return True
-
-    total = sum(
-        (int(char) if char.isdigit() else _TRANSLITERATION[char]) * weight
-        for char, weight in zip(value, _WEIGHTS)
-    )
-    expected = "X" if total % 11 == 10 else str(total % 11)
-    return value[8] == expected
+    return value[8] == expected_check_digit(value)
 
 
 # ---------------------------------------------------------------------------
@@ -293,7 +319,29 @@ def fetch_vehicle_details(vin: str, *, include_recalls: bool = True,
     else:
         warning = {'en': '', 'ro': ''}
 
-    if 'suggested_vin' in vehicle:
+    # When the entered check digit is wrong we can compute the correct one
+    # locally (ISO 3779) and point the user at it — much more useful than the
+    # '!' placeholder NHTSA returns in "Suggested VIN".
+    corrected = correct_vin_check_digit(vin)
+    check_digit_bad = expected_check_digit(vin) and vin[8] != corrected[8]
+    if check_digit_bad:
+        details = {'vehicle': vehicle, 'recalls': [],
+                   'corrected_vin': corrected}
+        base = warning
+        warning = {
+            'en': ((base['en'] + ' ') if base['en'] else '') +
+                  f'Check digit (9th character) is invalid. Corrected VIN: '
+                  f'{corrected}.',
+            'ro': ((base['ro'] + ' ') if base['ro'] else '') +
+                  f'Cifra de control (caracterul 9) este invalidă. '
+                  f'VIN corectat: {corrected}.',
+        }
+        # Drop the raw NHTSA suggestion in favour of the computed one.
+        vehicle.pop('suggested_vin', None)
+    else:
+        details = {'vehicle': vehicle, 'recalls': []}
+
+    if not check_digit_bad and 'suggested_vin' in vehicle:
         suggested = vehicle['suggested_vin']
         warning = {
             'en': ((warning['en'] + ' ') if warning['en'] else '') +
@@ -302,7 +350,7 @@ def fetch_vehicle_details(vin: str, *, include_recalls: bool = True,
                   f'VIN sugerat: {suggested}.',
         }
 
-    details = {'vehicle': vehicle, 'recalls': [], 'warning': warning}
+    details['warning'] = warning
 
     make = vehicle.get('make')
     model = vehicle.get('model')

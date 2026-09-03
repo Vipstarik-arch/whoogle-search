@@ -86,7 +86,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_nl": {
         "search": "Zoeken",
@@ -175,7 +176,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_de": {
         "search": "Suchen",
@@ -264,7 +266,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_es": {
         "search": "Buscar",
@@ -353,7 +356,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_id": {
         "": "--",
@@ -442,7 +446,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_it": {
         "search": "Cerca",
@@ -531,7 +536,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_pt": {
         "search": "Pesquisar",
@@ -620,7 +626,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_ru": {
         "search": "Поиск",
@@ -709,7 +716,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_zh-CN": {
         "search": "搜索",
@@ -798,7 +806,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_si": {
         "search": "සොයන්න",
@@ -887,7 +896,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_fr": {
         "search": "Chercher",
@@ -976,7 +986,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_fa": {
         "search": "جستجو",
@@ -1065,7 +1076,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_cs": {
         "search": "Hledat",
@@ -1154,7 +1166,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_zh-TW": {
         "": "--",
@@ -1243,7 +1256,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_bg": {
         "search": "Търсене",
@@ -1332,7 +1346,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_hi": {
         "search": "खोज",
@@ -1421,7 +1436,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_ja": {
         "search": "検索",
@@ -1510,7 +1526,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_ko": {
         "search": "검색",
@@ -1599,7 +1616,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_ku": {
         "search": "Bigere",
@@ -1688,7 +1706,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_th": {
         "search": "ค้นหา",
@@ -1777,7 +1796,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_cy": {
         "search": "Chwiliwch",
@@ -1866,7 +1886,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_az": {
         "": "--",
@@ -1955,7 +1976,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_el": {
         "": "--",
@@ -2044,7 +2066,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_tr": {
         "": "--",
@@ -2133,7 +2156,8 @@
         "vin.decodedPrivacy": "The VIN was sent to the public NHTSA API (vpic.nhtsa.dot.gov) to decode the record. Disable with WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Vehicle verification sources",
         "sources.subtitle": "Official and commercial resources where a VIN can be checked. Whoogle only links to them — vehicle data is never sent to these services automatically.",
-        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation."
+        "sources.disclaimer": "Always confirm a purchase with an independent inspection. Paid reports may be misleading and do not replace legal documentation.",
+        "vin.correctedTitle": "Corrected VIN (check digit fixed)"
     },
     "lang_ro": {
         "": "--",
@@ -2222,6 +2246,7 @@
         "vin.decodedPrivacy": "VIN-ul a fost trimis către API-ul public NHTSA (vpic.nhtsa.dot.gov) pentru decodificare. Poate fi dezactivat cu WHOOGLE_VIN_DECODER=0.",
         "sources.title": "Surse de verificare a vehiculelor",
         "sources.subtitle": "Resurse oficiale și comerciale unde poate fi verificat un VIN. Whoogle doar le indică — datele vehiculului nu sunt trimise automat către aceste servicii.",
-        "sources.disclaimer": "Confirmă întotdeauna o achiziție cu o inspecție independentă. Rapoartele plătite pot fi incomplete și nu înlocuiesc documentele legale."
+        "sources.disclaimer": "Confirmă întotdeauna o achiziție cu o inspecție independentă. Rapoartele plătite pot fi incomplete și nu înlocuiesc documentele legale.",
+        "vin.correctedTitle": "VIN corectat (cifra de control reparată)"
     }
 }

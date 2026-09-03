@@ -666,6 +666,8 @@ The home page includes a VIN card for checking a vehicle before buying:
   API](https://vpic.nhtsa.dot.gov/decoder/) and displays the manufacturer
   record (make, model, year, engine, body, plant, …) plus matching U.S. recall
   campaigns. Disable this on the instance with `WHOOGLE_VIN_DECODER=0`.
+  The check digit (9th character) is validated locally with the ISO 3779
+  weights; when it is wrong the page computes and proposes the corrected VIN.
 - **Verification sources** – `/vehicle-sources` lists official registries
   (NHTSA, NMVTIS, RAR, ASP Moldova, DVLA) and commercial report providers
   (CARFAX, AutoCheck, HPI, autoDNA, carVertical). Whoogle only links to them;

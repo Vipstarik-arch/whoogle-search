@@ -91,7 +91,7 @@ def test_opensearch(client):
     assert '<ShortName>Whoogle</ShortName>' in str(rv.data)
 
 
-VIN = '1HGCM82653A004352'
+VIN = '1HGCM82633A004352'
 
 
 def test_vehicle_search_valid_vin(client):

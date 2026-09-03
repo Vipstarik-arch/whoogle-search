@@ -254,7 +254,13 @@ def vehicle_search():
             'VIN invalid. Enter 17 characters (letters I, O and Q are not used) '
             'and check that it was copied correctly.', 400)
 
-    query = build_vin_query(vin, request.values.get('damage') == 'on')
+    focuses = request.values.getlist('focus')
+    query = build_vin_query(
+        vin,
+        request.values.get('damage') == 'on',
+        focuses=focuses or None,
+        country=request.values.get('vin_country', g.user_config.country)
+    )
     if request.method == 'POST':
         query = encrypt_string(g.session_key, query)
     params = {'q': query}

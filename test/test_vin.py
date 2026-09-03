@@ -28,3 +28,10 @@ def test_vin_query_can_focus_on_history():
     query = build_vin_query(VALID_VIN, include_damage=False)
     assert 'odometer' in query
     assert 'accident' not in query
+
+
+def test_vin_query_supports_market_and_focuses():
+    query = build_vin_query(VALID_VIN, focuses=['theft'], country='de')
+    assert 'stolen' in query
+    assert 'Deutschland' in query
+    assert 'odometer' not in query

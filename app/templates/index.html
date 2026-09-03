@@ -109,6 +109,31 @@
                 <input type="checkbox" name="damage" checked>
                 Include în special daune și accidente
             </label>
+            <div class="vin-advanced-options">
+                <label for="vin-country">Țara / piața automobilului</label>
+                <select id="vin-country" name="vin_country">
+                    <option value="">Toate țările (căutare globală)</option>
+                    <option value="ro">România / Moldova</option>
+                    <option value="gb">Marea Britanie</option>
+                    <option value="us">SUA</option>
+                    <option value="de">Germania</option>
+                    <option value="fr">Franța</option>
+                    <option value="it">Italia</option>
+                    <option value="es">Spania</option>
+                    <option value="pl">Polonia</option>
+                    <option value="ru">Rusia</option>
+                    <option value="ua">Ucraina</option>
+                </select>
+                <span class="vin-option-label">Categorii căutate:</span>
+                <div class="vin-checks">
+                    <label><input type="checkbox" name="focus" value="auction" checked> licitații</label>
+                    <label><input type="checkbox" name="focus" value="insurance" checked> asigurări</label>
+                    <label><input type="checkbox" name="focus" value="theft" checked> furt</label>
+                    <label><input type="checkbox" name="focus" value="mileage" checked> kilometraj</label>
+                    <label><input type="checkbox" name="focus" value="service" checked> service Ford</label>
+                    <label><input type="checkbox" name="focus" value="official" checked> rapoarte oficiale</label>
+                </div>
+            </div>
         </form>
         <div class="vin-source-list">
             <strong>Surse care pot conține informații:</strong>

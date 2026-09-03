@@ -40,15 +40,47 @@ def is_valid_vin(vin: str, *, check_digit: bool = True) -> bool:
     return value[8] == expected
 
 
-def build_vin_query(vin: str, include_damage: bool = True) -> str:
-    """Build a broad, useful query without contacting third-party databases."""
+COUNTRY_NAMES = {
+    'ro': 'Romania Moldova', 'md': 'Moldova Romania', 'gb': 'UK Britain',
+    'us': 'USA United States', 'de': 'Germany Deutschland',
+    'fr': 'France', 'it': 'Italy Italia', 'es': 'Spain España',
+    'pl': 'Poland Polska', 'ru': 'Russia Россия', 'ua': 'Ukraine Україна',
+}
+
+# Common words used by auction, insurer and vehicle-history pages. Including
+# several languages makes the global search useful even when a page is not in
+# the user's interface language.
+GLOBAL_TERMS = (
+    'vehicle vehiculo fahrzeug vehículo voiture auto samochód '
+    'historia fahrzeughistorie historie history raport registro'
+)
+
+
+def build_vin_query(vin: str, include_damage: bool = True,
+                    focuses=None, country: str = '') -> str:
+    """Build a broad public-web query for a VIN in the selected market.
+
+    ``focuses`` can contain ``damage``, ``auction``, ``insurance``, ``theft``,
+    ``mileage``, ``service`` or ``official``. With no focuses, all categories
+    are searched for backwards compatibility.
+    """
     value = normalize_vin(vin)
-    terms = (
-        'accident damage salvage auction insurance theft stolen recall '
-        'odometer mileage title history report Ford authorized service '
-        'paid official report'
-        if include_damage else
-        'vehicle history report recall theft title odometer auction'
-    )
+    selected = set(focuses or ('damage', 'auction', 'insurance', 'theft',
+                               'mileage', 'service', 'official'))
+    categories = {
+        'damage': 'accident damage damaged salvage flood fire hail',
+        'auction': 'auction copart iaai salvage sale',
+        'insurance': 'insurance claim total loss insurer',
+        'theft': 'theft stolen recovered police',
+        'mileage': 'odometer mileage kilometer kilometraj rollback',
+        'service': 'Ford authorized service dealer maintenance repair',
+        'official': 'title registration recall vehicle history report paid official',
+    }
+    if not include_damage:
+        selected.discard('damage')
+    terms = ' '.join(categories[key] for key in categories if key in selected)
+    if not terms:
+        terms = 'vehicle history report'
+    market = COUNTRY_NAMES.get((country or '').lower(), '')
     # Exact matching keeps a VIN from being split by Google's tokenizer.
-    return f'"{value}" ({terms})'
+    return f'"{value}" ({terms} {market} {GLOBAL_TERMS})'
